@@ -20,18 +20,18 @@ module.exports = {
           .populate("event")
           .populate("user", "-password")
           .execPopulate();
-        
-        registration.owner = registration.event.user
-        registration.eventTitle = registration.event.title
-        registration.eventPrice = registration.event.price
-        registration.eventDate = registration.event.date 
-        registration.userEmail = registration.event.email
-        registration.save()
-        console.log(registration)
-        
-        const ownerSocket = req.connectUsers[registration.event.user]
+
+        registration.owner = registration.event.user;
+        registration.eventTitle = registration.event.title;
+        registration.eventPrice = registration.event.price;
+        registration.eventDate = registration.event.date;
+        registration.userEmail = registration.event.email;
+        registration.save();
+        console.log(registration);
+
+        const ownerSocket = req.connectUsers[registration.event.user];
         if (ownerSocket) {
-          req.io.to(ownerSocket).emit('registration_request', registration);
+          req.io.to(ownerSocket).emit("registration_request", registration);
         }
 
         return res.json(registration);
@@ -54,19 +54,21 @@ module.exports = {
   },
 
   getMyRegistration(req, res) {
-    jwt.verify(req.token, 'secret', async (err, authData) => {
+    jwt.verify(req.token, "secret", async (err, authData) => {
       if (err) {
         res.sendStatus(401);
-      }else {
+      } else {
         try {
-          const registrationArr = await Registration.find({"owner": authData.user._id})
+          const registrationArr = await Registration.find({
+            owner: authData.user._id,
+          });
           if (registrationArr) {
             return res.json(registrationArr);
           }
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       }
-    })
-  }
+    });
+  },
 };

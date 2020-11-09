@@ -5,7 +5,7 @@ module.exports = {
   getEventById(req, res) {
     jwt.verify(req.token, "secret", async (err, authData) => {
       if (err) {
-        res.statusCode(401);
+        res.sendStatus(401);
       } else {
         const { eventId } = req.params;
         try {

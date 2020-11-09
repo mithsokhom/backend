@@ -1,4 +1,3 @@
-//first need to install multer(yarn add multer) for file uploading
 const multer = require('multer');
 const path = require('path');
 
